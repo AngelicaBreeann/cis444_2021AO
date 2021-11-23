@@ -8,7 +8,7 @@ import bcrypt
 
 from db_con import get_db_instance, get_db
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder = "templates")
 FlaskJSON(app)
 
 USER_PASSWORDS = { "cjardin": "strong password"}
@@ -28,7 +28,7 @@ global_db_con = get_db()
 with open("secret", "r") as f:
     JWT_SECRET = f.read()
 
-@app.route('/') #endpoint
+@app.route('/class') #endpoint
 def index():
     return 'Web App with Python Caprice!' + USER_PASSWORDS['cjardin']
 
@@ -47,17 +47,17 @@ def back():
 @app.route('/backp',  methods=['POST']) #endpoint
 def backp():
     print(request.form)
-    salted = bcrypt.hashpw( bytes(request.form['fname'],  'utf-8' ) , bcrypt.gensalt(10))
+    salted = bcrypt.hashpw( bytes(request.form['fname'],  'utf-9' ) , bcrypt.gensalt(10))
     print(salted)
 
     print(  bcrypt.checkpw(  bytes(request.form['fname'],  'utf-8' )  , salted ))
 
     return render_template('backatu.html',input_from_browser= str(request.form) )
-
 @app.route('/auth',  methods=['POST']) #endpoint
 def auth():
         print(request.form)
         return json_response(data=request.form)
+
 
 
 
@@ -96,6 +96,63 @@ def hellodb():
     cur.execute("insert into music values( 'dsjfkjdkf', 1);")
     global_db_con.commit()
     return json_response(status="good")
+
+#Assigment 3
+@app.route('/loginStore',  methods=['GET']) #endpoint
+def userLogin():
+    return render_template('BookPage.html')
+
+@app.route('/loginPage',  methods=['POST']) #endpoint
+def loginUser():
+    userInput = request.form['username']
+    pwInput =  request.form['password']
+    cur = global_db_con.cursor()
+    cur.execute(f"select * from users where username = '{userInput}';")
+    data = cur.fetchone()
+
+    if data is None:
+        print('data is null')
+    else:
+        print('here')    
+
+    salted = bcrypt.hashpw( bytes(request.form['password'],  'utf-8' ) , bcrypt.gensalt(10))
+    print(salted)
+    cur.execute(f"select password from users where username = '{userInput}';")
+    correctInput = cur.fetchone()[0]
+    correctInput = bytes(correctInput, 'utf-8')
+    if( bcrypt.checkpw( bytes(request.form['password'], 'utf-8') , correctInput)):
+        print("testing:")
+        print(pwInput)
+        print (correctInput)
+    else:
+        print("INVALID")
+                            
+    '''
+    def userAuth():
+    print('hi')
+    return render_template('bookPage.html')
+       cur = global_db_con.cursor()
+    name_ = request.json.get('user')
+   
+    cur.execute(f"select * from users where username = '{name_}';")
+    #+ request.form['username'] = ";" ) 
+    #    find = cur.fetchone()
+    
+    if find is None:
+        print ("Invalid Login")
+    else:
+        print("hi")
+    #return json_response(user_)
+    '''
+#GET 6
+#app.route('/bookStore', methods=['GET'])
+#def buybook():
+   # booktitle = request.args.get("bookname")
+    #return render_template{'bookPage.html'}
+
+
+
+
 
 
 app.run(host='0.0.0.0', port=80)

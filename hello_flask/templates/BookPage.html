@@ -1,0 +1,41 @@
+<html>
+  <head>
+  <h1> LOGIN PAGE! <h1>  
+    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+  <head>
+
+    <form id = "loginInfo">
+      
+    <div>
+      <label for="username">Username:</label>
+      <input type="text" id="username" name="username">
+    </div>
+
+    <div>
+      <label for="pass">Password :</label>
+      <input type="password" id="password" name="password">
+    </div>
+
+    <button id="button"type= "submit" onclick ="getLoginInfo(); return false;"> Login</button>
+   <!-- <input type="submit" value="Sign in">-->
+    </form>
+
+<script>
+    function getLoginInfo()
+    {
+    $.post("/loginPage", {username:$("#username").val(), password: $("#password").val()},
+	   function(data, textStatus) {
+	       console.log(data.token);
+	       jwt = data.token;
+					
+	       get_books();
+	   }, "json").fail( function(response) {
+	       console.log("error");
+	       console.log(response);
+	   });
+	return false;
+   
+   }
+
+  </script>
+</html>

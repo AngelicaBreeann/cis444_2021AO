@@ -11,7 +11,8 @@ def handle_request():
     bookInfo = []
     for i in cur.fetchall():
         print('Books: ',i)
-        displayBooks = {"id": i[0], "bookname":i[1], "price":i[2]}
+        #displayBooks = {"id": i[0], "bookname":i[1], "price":i[2]}
+        displayBooks = {"bookname":i[0]} 
         bookInfo.append(displayBooks)
     return json_response( token = create_token(  g.jwt_data ) , bookInfo =bookInfo)
 

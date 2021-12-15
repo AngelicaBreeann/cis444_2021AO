@@ -98,8 +98,8 @@
 
 
 	<div class="chat-popup" id="myForm" style="display:none">
-		</form>
-      			<h1>Enter Information here:</h1>
+		</form>EN
+      			<h1:</h1>
 			
 			<textarea type="text" id="words" required></textarea>
 			<input type="button" id="myButton" onclick="getText()" value="Enter" />

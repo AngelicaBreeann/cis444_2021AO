@@ -23,3 +23,12 @@ def handle_request():
         return json_response( token = create_token(user) , authenticated = True)
     else:
         return json_response(status_=401, message = 'Invalid credentials', authenticated =  False )
+
+
+
+def addtoTable():
+   words = request.form['bookname']
+   cur.execute(f"INSERT INTO book(bookname) VALUES (%s)",(bookname))
+   conn.commit()
+   print("TESTING!!!!!!")
+   print (bookname)

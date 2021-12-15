@@ -126,24 +126,34 @@ def loginUser():
         print (correctInput)
     else:
         print("INVALID")
-                            
-    '''
-    def userAuth():
-    print('hi')
-    return render_template('bookPage.html')
-       cur = global_db_con.cursor()
-    name_ = request.json.get('user')
-   
-    cur.execute(f"select * from users where username = '{name_}';")
-    #+ request.form['username'] = ";" ) 
-    #    find = cur.fetchone()
+
+@app.route('/textTable',  methods=['POST']) #endpoint
+def addTable():
+    book_name = request.form['bookname_']
+    secret = 'secret'
+    cur = g.db.cursor()
+    cur.execute(f"INSERT INTO book(bookname) VALUES('{book_name}');")
+    g.db.commit()
+    logger.debug("User input added")
+    chat_list= []
+    dataBook = { "input" : bookname}
+    chat_list.append(dataBook)
+    jwt_str = jwt.encode(dataBook,secret,algoritm="HS256")
+    return jsonify({'data':dataBook, 'message':'Message Recieved', 'token':jwt_str})
+
+
     
-    if find is None:
-        print ("Invalid Login")
-    else:
-        print("hi")
-    #return json_response(user_)
-    '''
+   #words = request.form['bookname']
+    #cur.execute(f"select password from users where username = '{userInput}';")
+    # cursor.execute("INSERT INTO book(bookname) VALUES (%s)",(bookname))
+  # cur.execute(f"INSERT INTO book(bookname) VALUES (%s)",(bookname))
+   #conn.commit()
+   #print("TESTING!!!!!!")
+  # print (bookname)
+
+
+
+    
 #GET 6
 #app.route('/bookStore', methods=['GET'])
 #def buybook():
